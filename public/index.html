@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootcamp APs</title>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+        integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="word-game.js" defer></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <h3 class="text-center" >Bootcamp APls</h3>
+    <div class="row" x-data="{
+        sentence: '',
+        typedSentence: '',
+
+        type: '',
+        billTotal: 0,
+        enteredPrice: '',
+        typedBill: '',
+        amount: '',
+
+        phonebill: 0,
+        enteredBill: '',
+
+        TotalDff: '',
+        usageEntry: '',
+        usage: '',
+        amountEntered: '',
+        airtime: '',
+        airtimeCalc(){
+            axios.get(`/api/enough?usage=${this.usage}&available=${this.airtime}`)
+            .then(result => {
+                console.log(result.data)
+                this.TotalDff = result.data.result
+            })
+        },
+        totalPhonebill(){
+            axios.get(`/api/phonebill/prices?type=${this.type}&price=${this.amount}`)
+            .then(result => {
+                console.log(result.data)
+                //this.billTotal = result.data.bill
+            })
+        },
+        calcBill(){
+            axios.get(`/api/phonebill/total?bill=${this.phonebill}`)
+            .then(result => {
+                console.log(result.data)
+                this.billTotal = result.data.bill
+            })
+        },
+        game(){
+            axios.get(`/api/word_game?sentence=${this.sentence}`)
+            .then(result => {
+                console.log(result.data.longestWord)
+                this.sentence = result.data
+            })
+        },
+        
+
+    }">
+
+        <div class="text-center col-md-4">
+            <div class="card">
+                <div class="card-body ">
+                    <h3 class="card-title">WORD GAME</h3>
+
+                    <div>
+                        <span>Longest word: </span>
+                        <span x-text="sentence.longestWord"></span><br>
+                        <span>Shortest Word: </span>
+                        <span x-text="sentence.shortestWord"></span><br>
+                        <span>Letter count: </span>
+                        <span x-text="sentence.wordLengths"></span>
+                    </div>
+
+                    <!-- <form> -->
+                    <input class="form-control" type="text" x-model="typedSentence"
+                        placeholder="enter a sentence" /><br>
+                    <button class="btn btn-success btn-block" @click="(game), (sentence=typedSentence), (setTimeout(() => {
+                                typedSentence='';
+                                sentence= '';
+                              }, 3000))">Submit</button>
+                    <!-- </form> -->
+
+                </div>
+            </div>
+
+        </div>
+        <div class="text-center col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Total Phone Bill</h3>
+                    <div>
+                        <span>Type: </span><span x-text="type"></span><br>
+                        <span>Price: </span><span x-text="amount"></span>
+                    </div>
+                    <!-- <input class="form-control" type="text" x-model="typedBill" placeholder="enter a type" /><br> -->
+                    <select class="form-control" name="type" id="type" x-model="typedBill">
+                        <option>Select type</option>
+                        <option value="call">call</option>
+                        <option value="sms">sms</option>
+
+                    </select>
+
+                    <input class="form-control" type="number" x-model="enteredPrice" placeholder="enter a price" /><br>
+
+                    <button class="btn btn-success btn-block" @click="(totalPhonebill), (type=typedBill), (amount=enteredPrice), (setTimeout(() => {
+                        type='';
+                        typedBill= '';
+                        amount = '';
+                        enteredPrice= '';
+                              }, 3000))">Done</button>
+                </div>
+                <hr>
+
+                <h3>calclate Bill</h3>
+
+                <div class="card-body">
+                    <span>Bill: </span><span x-text="billTotal"></span>
+
+                    <input class="form-control" type="text" x-model="enteredBill" placeholder="enter a bill..." /><br>
+
+                    <button class="btn btn-success btn-block" @click="(calcBill), (phonebill=enteredBill), (setTimeout(() => {
+                        billTotal='';
+                                enteredBill= '';
+                              }, 3000))">Done</button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center col-md-4">
+            <div class="card">
+
+                <div class="card-body ">
+                    <h3 class="card-title">enough Airtime</h3>
+                    <span>result: </span><span x-text="TotalDff"></span>
+
+                    <!-- <form> -->
+                    <!-- <label>Enter usage</label> -->
+                    <input class="form-control" type="text" x-model="usageEntry" placeholder="enter usage" /><br>
+                    <!-- <label>Enter Amount</label> -->
+                    <input class="form-control" type="number" x-model="amountEntered"
+                        placeholder="enter amount..." /><br>
+                    <button class="btn btn-success btn-block" @click="(airtimeCalc), (usage=usageEntry),(airtime=amountEntered),(setTimeout(() => {
+                            TotalDff='',    
+                            usage='';
+                                airtime= 0;
+                                usageEntry='';
+                                amountEntered= 0;
+                            }, 3000))">Submit</button>
+                    <!-- </form> -->
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+    </div>
+
+
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+</body>
+
+</html>
