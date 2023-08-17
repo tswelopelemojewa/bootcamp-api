@@ -1,6 +1,6 @@
 export function totalPhoneBill(bill){
     let call = 2.75;
-    let sms = 0.65;
+    let sms = 0.75;
     let callCount = 0;
     let smsCount = 0;
   

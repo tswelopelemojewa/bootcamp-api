@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootcamp APs</title>
+    <title>Bootcamp APis</title>
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
         integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="bootcamp.js"></script>
     <script src="word-game.js" defer></script>
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -19,89 +20,79 @@
 
 </head>
 
-<body>
-    <h3 class="text-center" >Bootcamp APls</h3>
-    <div class="row" x-data="{
-        sentence: '',
-        typedSentence: '',
+<body class="container">
+    <br>
+    <h3 class="text-center">BOOTCAMP APIS</h3>
+    <hr>
+    <br>
+    <div class="" x-data="BootcampAPi">
+        <div class="row">
+            <div class="text-center col-md-6">
+                <div class="card">
+                    <div class="card-body ">
+                        <h3 class="card-title">WORD GAME</h3>
 
-        type: '',
-        billTotal: 0,
-        enteredPrice: '',
-        typedBill: '',
-        amount: '',
+                        <div>
+                            <span>Longest word: </span>
+                            <span x-text="sentence.longestWord"></span><br>
+                            <span>Shortest Word: </span>
+                            <span x-text="sentence.shortestWord"></span><br>
+                            <span>Letter count: </span>
+                            <span x-text="sentence.wordLengths"></span><br>
+                            <span>    </span>
+                        </div>
 
-        phonebill: 0,
-        enteredBill: '',
-
-        TotalDff: '',
-        usageEntry: '',
-        usage: '',
-        amountEntered: '',
-        airtime: '',
-        airtimeCalc(){
-            axios.get(`/api/enough?usage=${this.usage}&available=${this.airtime}`)
-            .then(result => {
-                console.log(result.data)
-                this.TotalDff = result.data.result
-            })
-        },
-        totalPhonebill(){
-            axios.get(`/api/phonebill/prices?type=${this.type}&price=${this.amount}`)
-            .then(result => {
-                console.log(result.data)
-                //this.billTotal = result.data.bill
-            })
-        },
-        calcBill(){
-            axios.get(`/api/phonebill/total?bill=${this.phonebill}`)
-            .then(result => {
-                console.log(result.data)
-                this.billTotal = result.data.bill
-            })
-        },
-        game(){
-            axios.get(`/api/word_game?sentence=${this.sentence}`)
-            .then(result => {
-                console.log(result.data.longestWord)
-                this.sentence = result.data
-            })
-        },
-        
-
-    }">
-
-        <div class="text-center col-md-4">
-            <div class="card">
-                <div class="card-body ">
-                    <h3 class="card-title">WORD GAME</h3>
-
-                    <div>
-                        <span>Longest word: </span>
-                        <span x-text="sentence.longestWord"></span><br>
-                        <span>Shortest Word: </span>
-                        <span x-text="sentence.shortestWord"></span><br>
-                        <span>Letter count: </span>
-                        <span x-text="sentence.wordLengths"></span>
-                    </div>
-
-                    <!-- <form> -->
-                    <input class="form-control" type="text" x-model="typedSentence"
-                        placeholder="enter a sentence" /><br>
-                    <button class="btn btn-success btn-block" @click="(game), (sentence=typedSentence), (setTimeout(() => {
+                        <!-- <form> -->
+                        <input class="form-control" type="text" x-model="typedSentence"
+                            placeholder="enter a sentence" /><br>
+                        <button class="btn btn-success btn-block" @click="(game), (sentence=typedSentence), (setTimeout(() => {
                                 typedSentence='';
                                 sentence= '';
                               }, 3000))">Submit</button>
-                    <!-- </form> -->
+                        <!-- </form> -->
 
+                    </div>
                 </div>
+
             </div>
 
+            <div class="text-center col-md-6">
+                <div class="card">
+
+                    <div class="card-body ">
+                        <h3 class="card-title">ENOUGH AIRTIME</h3>
+                        <span>result: </span><span x-text="TotalDff"></span>
+
+                        <!-- <form> -->
+                        <!-- <label>Enter usage</label> -->
+                        <input class="form-control" type="text" x-model="usageEntry" placeholder="enter usage" /><br>
+                        <!-- <label>Enter Amount</label> -->
+                        <input class="form-control" type="number" x-model="amountEntered"
+                            placeholder="enter amount..." /><br>
+                        <button class="btn btn-success btn-block" @click="(airtimeCalc), (usage=usageEntry),(airtime=amountEntered),(setTimeout(() => {
+                            TotalDff='',    
+                            usage='';
+                                airtime= 0;
+                                usageEntry='';
+                                amountEntered= 0;
+                            }, 3000))">Submit</button>
+                        <!-- </form> -->
+
+                    </div>
+
+
+                </div>
+
+            </div>
         </div>
-        <div class="text-center col-md-4">
+
+
+
+        <br>
+        <div class="text-center">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Total Phone Bill</h3>
+                    <h3 class="card-title">TOTAL PHONE BILL</h3>
                     <div>
                         <span>Type: </span><span x-text="type"></span><br>
                         <span>Price: </span><span x-text="amount"></span>
@@ -112,7 +103,7 @@
                         <option value="call">call</option>
                         <option value="sms">sms</option>
 
-                    </select>
+                    </select><br>
 
                     <input class="form-control" type="number" x-model="enteredPrice" placeholder="enter a price" /><br>
 
@@ -121,55 +112,77 @@
                         typedBill= '';
                         amount = '';
                         enteredPrice= '';
-                              }, 3000))">Done</button>
+                              }, 5000))">SET PRICE</button>
                 </div>
-                <hr>
 
-                <h3>calclate Bill</h3>
 
                 <div class="card-body">
-                    <span>Bill: </span><span x-text="billTotal"></span>
+                    <hr>
+
+                    <h3>CALCULATE BILL</h3>
+                    <span>BILL: </span><span x-text="billTotal"></span>
 
                     <input class="form-control" type="text" x-model="enteredBill" placeholder="enter a bill..." /><br>
 
                     <button class="btn btn-success btn-block" @click="(calcBill), (phonebill=enteredBill), (setTimeout(() => {
                         billTotal='';
                                 enteredBill= '';
-                              }, 3000))">Done</button>
+                              }, 5000))">Done</button>
 
                 </div>
             </div>
         </div>
 
-        <div class="text-center col-md-4">
+
+        <!-- <div class="text-center ">
             <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Total Phone Bill</h3>
+                    <hr>
 
-                <div class="card-body ">
-                    <h3 class="card-title">enough Airtime</h3>
-                    <span>result: </span><span x-text="TotalDff"></span>
+                    <div>
+                        <span>SMS: </span><span x-text="sms_price"></span><br>
+                        <span>CALL: </span><span x-text="call_price"></span><br>
+                    </div><br>
 
-                    <!-- <form> -->
-                    <!-- <label>Enter usage</label> -->
-                    <input class="form-control" type="text" x-model="usageEntry" placeholder="enter usage" /><br>
-                    <!-- <label>Enter Amount</label> -->
-                    <input class="form-control" type="number" x-model="amountEntered"
-                        placeholder="enter amount..." /><br>
-                    <button class="btn btn-success btn-block" @click="(airtimeCalc), (usage=usageEntry),(airtime=amountEntered),(setTimeout(() => {
-                            TotalDff='',    
-                            usage='';
-                                airtime= 0;
-                                usageEntry='';
-                                amountEntered= 0;
-                            }, 3000))">Submit</button>
-                    <!-- </form> -->
+                    <label>SMS Price </label>
+                    <input class="form-control" type="number" x-model="user_sms_price"
+                        placeholder="enter a price" /><br>
+
+                    <label>CALL Price</label>
+                    <input class="form-control" type="number" x-model="user_call_price"
+                        placeholder="enter a price" /><br>
+
+
+                    <button class="btn btn-success btn-block" @click="(totalPhonebill), (sms_price =user_sms_price), (call_price = user_call_price), (setTimeout(() => {
+                        type='';
+                        typedBill= '';
+                        amount = '';
+                        enteredPrice= '';
+                              }, 5000))">SET price</button>
+
 
                 </div>
 
+                <div class="card-body">
+                    <hr>
 
+                    <h3>CALCULATE BILL</h3>
+                    <span>BILL: </span><span x-text="billTotal"></span>
+
+                    <input class="form-control" type="text" x-model="enteredBill" placeholder="enter a bill..." /><br>
+
+                    <button class="btn btn-success btn-block" @click="(calcBill), (totPhoneBill(enteredBill)), (phonebill=enteredBill), (setTimeout(() => {
+                        billTotal='';
+                                enteredBill= '';
+                              }, 5000))">CALCULATE</button>
+
+                </div>
             </div>
+        </div> -->
 
-        </div>
-    </div>
+
+    </div><br>
 
 
     </div>

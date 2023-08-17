@@ -5,34 +5,15 @@ import express from 'express';
 
 const app = express();
 
-// declareconfigurable port number
+// declare configurable port number
 const PORT = process.env.PORT || 4009;
 
-//
+
 app.use(express.json());
 
 app.use(express.static('public'));
 
 
-//game secton
-app.get('/api/word_game', function (req, res) {
-    const sentence = req.query.sentence;
-
-    if (!sentence) {
-        return res.json({
-            error: 'No sentence entered...'
-        })
-    }
-
-
-    res.json({
-        longestWord: `${longestWord(sentence)}`,
-        shortestWord: `${shortestWord(sentence)}`,
-        wordLengths: `${wordLengths(sentence)}`,
-    })
-});
-
-// the total phone bill
 
 
 const types = {
@@ -92,6 +73,8 @@ app.get('/api/phonebill/total', function(req, res){
 })
 
 
+
+
 app.post('/api/enough', function(req, res){
     const usage = req.body.usage;
     const available = req.body.available;
@@ -101,7 +84,8 @@ app.post('/api/enough', function(req, res){
         message: `Added a ${usage} for ${available}`
     });
     
-})
+});
+
 
 app.get('/api/enough', function(req, res){
     const usage = req.query.usage;
@@ -112,6 +96,25 @@ app.get('/api/enough', function(req, res){
     });
     
 })
+
+//game secton
+app.get('/api/word_game', function (req, res) {
+    const sentence = req.query.sentence;
+
+    if (!sentence) {
+        return res.json({
+            error: 'No sentence entered...'
+        })
+    }
+
+
+    res.json({
+        longestWord: `${longestWord(sentence)}`,
+        shortestWord: `${shortestWord(sentence)}`,
+        wordLengths: `${wordLengths(sentence)}`,
+    })
+});
+
 
 
 // run the server
